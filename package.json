@@ -18,7 +18,10 @@
     "typecheck":        "pnpm -r run typecheck",
     "test":             "vitest run",
     "test:ui":          "vitest --ui",
-    "test:watch":       "vitest"
+    "test:watch":       "vitest",
+    "clean":            "node scripts/clean.js",
+    "clean:dist":       "node scripts/clean.js --dist-only",
+    "nuke":             "node scripts/clean.js --nuke"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.1",

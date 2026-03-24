@@ -11,18 +11,18 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: (id) => {
-          // Vendor chunk — shared heavy deps loaded once
-          if (id.includes('node_modules/react') ||
-              id.includes('node_modules/react-dom')) {
-            return 'vendor-react'
-          }
-          if (id.includes('node_modules/@mui') ||
-              id.includes('node_modules/@emotion')) {
-            return 'vendor-mui'
-          }
-          if (id.includes('node_modules/react-admin') ||
-              id.includes('node_modules/ra-')) {
-            return 'vendor-ra'
+          // All three vendor groups (react, MUI, react-admin) import each other
+          // internally, so splitting them causes circular-chunk warnings in Rollup.
+          // A single 'vendor' chunk is loaded once and avoids the cycle entirely.
+          if (
+            id.includes('node_modules/react')       ||
+            id.includes('node_modules/react-dom')   ||
+            id.includes('node_modules/@mui')        ||
+            id.includes('node_modules/@emotion')    ||
+            id.includes('node_modules/react-admin') ||
+            id.includes('node_modules/ra-')
+          ) {
+            return 'vendor'
           }
           // Feature chunks — each loads lazily when its route activates
           if (id.includes('features/campaigns')) return 'chunk-campaigns'
