@@ -1,0 +1,38 @@
+{
+  "name": "mfe-monorepo",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20",
+    "pnpm": ">=9"
+  },
+  "scripts": {
+    "dev":              "pnpm -r --parallel run dev",
+    "build":            "pnpm --filter=@myorg/types build && pnpm --filter=@myorg/ui build && pnpm --filter=@myorg/admin build",
+    "build:storybook":  "pnpm --filter=@myorg/ui build:storybook",
+    "build:docs":       "pnpm --filter=@myorg/docs build",
+    "build:pages":      "pnpm build:storybook && pnpm build:docs",
+    "storybook":        "pnpm --filter=@myorg/ui dev",
+    "docs":             "pnpm --filter=@myorg/docs dev",
+    "lint":             "pnpm -r run lint",
+    "typecheck":        "pnpm -r run typecheck",
+    "test":             "vitest run",
+    "test:ui":          "vitest --ui",
+    "test:watch":       "vitest"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.27.1",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "@vitest/coverage-istanbul": "^2.1.9",
+    "@vitest/ui": "^2.1.9",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "typescript": "^5.4.0",
+    "vite": "6.2.7",
+    "vite-tsconfig-paths": "^5.0.0",
+    "vitest": "^2.1.9",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0"
+  }
+}

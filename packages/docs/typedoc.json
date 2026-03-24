@@ -1,0 +1,40 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+
+  "name": "@myorg — API Reference",
+
+  "entryPoints": [
+    "../types/src/index.ts",
+    "../ui/src/index.ts"
+  ],
+  "entryPointStrategy": "expand",
+
+  "out": "dist",
+
+  "tsconfig": "tsconfig.json",
+
+  "includeVersion": true,
+  "readme": "README.md",
+
+  "categorizeByGroup": true,
+  "defaultCategory": "General",
+  "categoryOrder": ["Auth", "Types", "Components", "General"],
+
+  "navigationLinks": {
+    "Storybook": "https://your-org.gitlab.io/mfe-monorepo/storybook/",
+    "Source":    "https://gitlab.com/your-org/mfe-monorepo"
+  },
+
+  "plugin": [],
+
+  "exclude": [
+    "**/node_modules/**",
+    "**/*.test.*",
+    "**/*.stories.*"
+  ],
+
+  "sourceLinkTemplate": "https://gitlab.com/your-org/mfe-monorepo/-/blob/{gitRevision}/{path}#L{line}",
+
+  "hideGenerator": false,
+  "cleanOutputDir": true
+}

@@ -1,0 +1,138 @@
+image: node:20-alpine
+
+variables:
+  PNPM_VERSION: "9"
+
+cache:
+  key:
+    files:
+      - pnpm-lock.yaml
+  paths:
+    - .pnpm-store
+
+before_script:
+  - corepack enable
+  - corepack prepare pnpm@${PNPM_VERSION} --activate
+  - pnpm config set store-dir .pnpm-store
+  - echo "//your-org.jfrog.io/artifactory/api/npm/npm-local/:_authToken=${JFROG_TOKEN}" >> .npmrc
+  - pnpm install --frozen-lockfile
+
+stages:
+  - validate
+  - test
+  - build
+  - publish
+  - pages
+
+# ── validate ────────────────────────────────────────────────────────────────
+lint-typecheck:
+  stage: validate
+  script:
+    - pnpm lint
+    - pnpm typecheck
+
+# ── test ────────────────────────────────────────────────────────────────────
+test:
+  stage: test
+  script:
+    - pnpm test -- --coverage
+  coverage: '/Lines\s*:\s*(\d+\.?\d*)%/'
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage/cobertura-coverage.xml
+
+# ── build ───────────────────────────────────────────────────────────────────
+build-app:
+  stage: build
+  script:
+    - pnpm build
+  artifacts:
+    paths:
+      - apps/admin/dist
+    expire_in: 1 week
+
+build-storybook:
+  stage: build
+  script:
+    - pnpm --filter=@myorg/types build
+    - pnpm --filter=@myorg/ui build:storybook
+  artifacts:
+    paths:
+      - packages/ui/storybook-static
+    expire_in: 1 week
+
+build-docs:
+  stage: build
+  script:
+    - pnpm --filter=@myorg/types build
+    - pnpm --filter=@myorg/docs build
+  artifacts:
+    paths:
+      - packages/docs/dist
+    expire_in: 1 week
+
+# ── publish ─────────────────────────────────────────────────────────────────
+publish-packages:
+  stage: publish
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+  script:
+    - pnpm changeset version
+    - pnpm -r --filter='./packages/ui'    publish --no-git-checks --access restricted
+    - pnpm -r --filter='./packages/types' publish --no-git-checks --access restricted
+  environment: production
+
+# ── pages ───────────────────────────────────────────────────────────────────
+# Deploys to GitLab Pages on every push to main.
+#
+# Final URL layout:
+#   https://<group>.gitlab.io/<project>/           → (reserved, you can add an index.html)
+#   https://<group>.gitlab.io/<project>/storybook/ → @myorg/ui Storybook
+#   https://<group>.gitlab.io/<project>/docs/      → @myorg/docs TypeDoc
+#
+# GitLab Pages requires the artifact path to be exactly `public/`.
+pages:
+  stage: pages
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+  needs:
+    - build-storybook
+    - build-docs
+  script:
+    # Assemble the public/ directory from both build artifacts
+    - mkdir -p public/storybook public/docs
+    - cp -r packages/ui/storybook-static/. public/storybook/
+    - cp -r packages/docs/dist/.           public/docs/
+    # Root index — redirects visitors to the two sub-sites
+    - |
+      cat > public/index.html << 'HTML'
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8" />
+        <title>@myorg — Developer Portal</title>
+        <style>
+          body { font-family: sans-serif; max-width: 600px; margin: 4rem auto; padding: 0 1rem; }
+          h1   { font-size: 1.5rem; }
+          ul   { line-height: 2.2; }
+          a    { color: #1976d2; }
+        </style>
+      </head>
+      <body>
+        <h1>@myorg — Developer Portal</h1>
+        <ul>
+          <li><a href="storybook/">Storybook</a> — interactive component catalogue</li>
+          <li><a href="docs/">API Reference</a> — TypeDoc for @myorg/types and @myorg/ui</li>
+        </ul>
+      </body>
+      </html>
+      HTML
+  artifacts:
+    paths:
+      - public   # GitLab Pages requires exactly this path
+    expire_in: 1 week
+  environment:
+    name: pages
+    url: https://$CI_PAGES_NAMESPACE.gitlab.io/$CI_PROJECT_PATH

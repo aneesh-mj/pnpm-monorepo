@@ -1,0 +1,8 @@
+node_modules
+dist
+.pnpm-store
+*.local
+.env
+coverage
+# MSW service worker — regenerated on postinstall via `msw init public/`
+public/mockServiceWorker.js
