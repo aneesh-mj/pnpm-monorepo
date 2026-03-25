@@ -15,7 +15,12 @@ const config: StorybookConfig = {
   },
 
   // Output static build to storybook-static/ for GitLab Pages
-  staticDirs: [],
+  staticDirs: ['../public'],
+
+  viteFinal: async (config) => {
+    config.base = process.env.STORYBOOK_BASE_URL ?? '/'
+    return config
+  },
 
   docs: {
     autodocs: 'tag', // generate autodoc page for stories tagged with autodocs

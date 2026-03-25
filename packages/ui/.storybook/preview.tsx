@@ -1,8 +1,17 @@
+/// <reference types="vite/client" />
 import React from 'react'
 import type { Preview, Decorator } from '@storybook/react'
 import { ThemeProvider, createTheme, CssBaseline } from '@mui/material'
 import { AdminContext } from 'react-admin'
 import { dataProvider } from './dataProvider.mock'
+import { initialize, mswLoader } from 'msw-storybook-addon';
+
+
+initialize({
+  serviceWorker: {
+    url: `${import.meta.env.BASE_URL}mockServiceWorker.js`,
+  },
+})
 
 const theme = createTheme({
   palette: { mode: 'light' },
@@ -32,6 +41,9 @@ const withAdminContext: Decorator = (Story, context) => {
 }
 
 const preview: Preview = {
+
+  loaders: [mswLoader], 
+
   decorators: [withAdminContext, withMuiTheme],
 
   parameters: {

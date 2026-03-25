@@ -175,6 +175,9 @@ importers:
       '@mui/material':
         specifier: ^5.16.0
         version: 5.18.0(@emotion/react@11.14.0(@types/react@19.2.14)(react@19.2.4))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.14)(react@19.2.4))(@types/react@19.2.14)(react@19.2.4))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      '@myorg/mocks':
+        specifier: workspace:*
+        version: link:../mocks
       '@storybook/addon-a11y':
         specifier: ^8.6.18
         version: 8.6.18(storybook@8.6.18(prettier@2.8.8))
@@ -217,6 +220,9 @@ importers:
       msw:
         specifier: ^2.3.0
         version: 2.12.13(typescript@5.9.3)
+      msw-storybook-addon:
+        specifier: ^2.0.0
+        version: 2.0.6(msw@2.12.13(typescript@5.9.3))
       react:
         specifier: ^19.0.0
         version: 19.2.4
@@ -2533,6 +2539,11 @@ packages:
 
   ms@2.1.3:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
+
+  msw-storybook-addon@2.0.6:
+    resolution: {integrity: sha512-ExCwDbcJoM2V3iQU+fZNp+axVfNc7DWMRh4lyTXebDO8IbpUNYKGFUrA8UqaeWiRGKVuS7+fU+KXEa9b0OP6uA==}
+    peerDependencies:
+      msw: ^2.0.0
 
   msw@2.12.13:
     resolution: {integrity: sha512-9CV2mXT9+z0J26MQDfEZZkj/psJ5Er/w0w+t95FWdaGH/DTlhNZBx8vBO5jSYv8AZEnl3ouX+AaTT68KXdAIag==}
@@ -5890,6 +5901,11 @@ snapshots:
   mrmime@2.0.1: {}
 
   ms@2.1.3: {}
+
+  msw-storybook-addon@2.0.6(msw@2.12.13(typescript@5.9.3)):
+    dependencies:
+      is-node-process: 1.2.0
+      msw: 2.12.13(typescript@5.9.3)
 
   msw@2.12.13(typescript@5.9.3):
     dependencies:

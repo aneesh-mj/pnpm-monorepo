@@ -55,6 +55,8 @@ build-app:
 
 build-storybook:
   stage: build
+  variables:
+    STORYBOOK_BASE_URL: "/$CI_PROJECT_PATH/storybook/"
   script:
     - pnpm --filter=@myorg/types build
     - pnpm --filter=@myorg/ui build:storybook
