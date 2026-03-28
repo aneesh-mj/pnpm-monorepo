@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/react'
 import { http, HttpResponse } from 'msw'
 import { userHandlers } from '@myorg/mocks/handlers'
-import type { User } from '@myorg/types'
+import type { User, GamePlay } from '@myorg/types'
 
 // ── Inline demo component ──────────────────────────────────────────────────
 // Not part of the published @myorg/ui library — exists only to demonstrate

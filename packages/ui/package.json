@@ -18,7 +18,8 @@
     "build:storybook": "storybook build --output-dir storybook-static",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src --ext .ts,.tsx",
-    "test": "vitest run"
+    "test": "vitest run",
+    "postinstall": "msw init public/ --save"
   },
   "peerDependencies": {
     "react": "^19",

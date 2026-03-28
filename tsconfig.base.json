@@ -13,7 +13,7 @@
     "baseUrl": ".",
     "paths": {
       "@myorg/ui":      ["packages/ui/src/index.ts"],
-      "@myorg/types":   ["packages/types/src/index.ts"],
+      "@myorg/types":   ["packages/types/dist/index.d.ts"],
       "@myorg/mocks":   ["packages/mocks/src/index.ts"],
       "@myorg/mocks/*": ["packages/mocks/src/*.ts"]
     }

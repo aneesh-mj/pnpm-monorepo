@@ -39,3 +39,5 @@ export interface AnalyticsSummary {
   visits:      number
   conversions: number
 }
+
+export * from './GamePlay';
